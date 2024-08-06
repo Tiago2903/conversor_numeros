@@ -4,16 +4,18 @@ class Convesor {
 	}
 
 	valorEntrada(num) {
-		if (typeof (num) === 'string') {
-			return this.romanoParaDecimal(num);
+		let validate = Number(num);
+		if (isNaN(validate)) {
+			return this.romanoParaDecimal(num.trim().toUpperCase());
 		} else {
-			return this.decimalParaRomano(num);
-
+			return this.decimalParaRomano(Number(num));
 		}
 	}
 
 	romanoParaDecimal(num) {
-		const input = num.split('');
+		let valor = num.replace(/[^IVXLCDM]/gi, '');
+		const input = valor.split('');
+
 		const valoresRomanos = {
 			'I': 1,
 			'V': 5,
@@ -43,7 +45,9 @@ class Convesor {
 	}
 
 	decimalParaRomano(num) {
-		let mapeamentoRomanos = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 }
+		let mapeamentoRomanos = {
+			M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1
+		};
 		let algarismosRomanos = '';
 
 		Object.keys(mapeamentoRomanos).forEach((el) => {
@@ -51,17 +55,18 @@ class Convesor {
 				num -= mapeamentoRomanos[el]
 				algarismosRomanos += el
 			}
-		})
+		});
 
-		return algarismosRomanos
+		return algarismosRomanos;
 	}
 }
 
-function numeroEscolhido(val) {
+function numeroEscolhido() {
+	entrada = document.getElementById('algarismo').value;
+	if (!entrada) {
+		return;
+	}
 	const conversor = new Convesor();
-	const resultado = conversor.valorEntrada(val);
-	console.log(resultado);
+	const resultado = conversor.valorEntrada(entrada);
+	document.getElementById('resultado').innerHTML = resultado;
 }
-
-numeroEscolhido('MCMXLIX');
-numeroEscolhido(1949);
